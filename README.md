@@ -1,5 +1,5 @@
 # Unity Sample Project - Interaction in FPS Game
-[![ezgif-5-67c21c596d.gif](https://s8.gifyu.com/images/ezgif-5-67c21c596d.gif)](https://gifyu.com/image/SHGUg)
+[![ezgif.com-gif-makerabf327c692e4eba6.gif](https://s8.gifyu.com/images/ezgif.com-gif-makerabf327c692e4eba6.gif)](https://gifyu.com/image/SHGfL)
 
 ## Start Using
 - Clone this repository
