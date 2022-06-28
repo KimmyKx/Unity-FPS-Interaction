@@ -5,6 +5,7 @@ public class Interaction : MonoBehaviour
 {
     public static Interaction Instance;
     public enum Property { LeverRoom }
+    private InteractionData lastInteraction;
 
     private void Awake()
     {
@@ -16,9 +17,12 @@ public class Interaction : MonoBehaviour
 
     [Header("LeverRoom")]
     public GameObject wall;
+    bool leverRoomIsActive = false;
+
     public void Interact(InteractionData _interactionData)
     {
-        if (!_interactionData)
+        lastInteraction = _interactionData;
+        if (!_interactionData || !_interactionData.IsInteractable)
             return;
         switch (_interactionData.interactionType)
         {
@@ -33,17 +37,37 @@ public class Interaction : MonoBehaviour
     public void LeverRoom()
     {
         StartCoroutine(RotateWall());
+        
     }
     
     private IEnumerator RotateWall()
     {
-        float _yRotation = 0;
+        float _yRotation = leverRoomIsActive ? wall.transform.rotation.y : 0;
         float _rotateSpeed = 2f;
-        while (_yRotation > -90f)
+        float _maxRotation = leverRoomIsActive ? 0 : -.6f;
+        Debug.Log("Lever pressed");
+        if (!leverRoomIsActive)
         {
-            _yRotation -= Time.deltaTime * _rotateSpeed;
-            wall.transform.rotation = new Quaternion(wall.transform.rotation.x, _yRotation, wall.transform.rotation.z, wall.transform.rotation.w);
-            yield return null;
+            leverRoomIsActive = true;
+            while (true)
+            {
+                _yRotation -= _rotateSpeed * Time.deltaTime;
+                wall.transform.Rotate(new Vector3(wall.transform.rotation.x, _yRotation, wall.transform.rotation.z));
+                if (wall.transform.rotation.y < _maxRotation)
+                    yield break;
+                yield return null;
+            }
+        } else
+        {
+            leverRoomIsActive = false;
+            while(true)
+            {
+                _yRotation += _rotateSpeed * Time.deltaTime;
+                wall.transform.Rotate(new Vector3(wall.transform.rotation.x, _yRotation, wall.transform.rotation.z));
+                if (wall.transform.rotation.y > _maxRotation)
+                    yield break;
+                yield return null;
+            }
         }
     }
     #endregion

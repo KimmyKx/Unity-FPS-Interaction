@@ -11,24 +11,33 @@ public class PlayerInteraction : MonoBehaviour
 
     [Header("UI Elements")]
     public Image pointer;
+    public GameObject interactButton;
 
     private void Update()
     {
         Ray _ray = new(transform.position, transform.forward);
         if (Physics.Raycast(_ray, out RaycastHit _hit, distance, whatIsInteractable))
         {
+            
             lastHit = _hit.transform.gameObject;
             collison = _hit.point;
             pointer.color = Color.white;
-            if(Input.GetMouseButtonDown(0))
+            interactButton.SetActive(true);
+            if(Input.GetKeyDown(KeyCode.E))
             {
-                Interaction.Instance.Interact(lastHit.GetComponent<InteractionData>());
+                Interact();
             }
         }
         else
         {
             pointer.color = Color.black;
+            interactButton.SetActive(false);
         }
+    }
+
+    public void Interact()
+    {
+        Interaction.Instance.Interact(lastHit.GetComponent<InteractionData>());
     }
 
     private void OnDrawGizmos()
